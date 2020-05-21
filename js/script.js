@@ -1,10 +1,7 @@
 
-//initials
-var selectBasic;
-var selectTheme;
+//global initials
 var selectColor;
 var selectPayment;
-var firstInput;
 var firstFieldSet;
 var activitiesFieldSet;
 var formEl;
@@ -23,17 +20,12 @@ var validationErrors;
  * registers initials with first/ expected values
  */
 const registerGlobals = () => {
-    selectBasic = document.getElementById('title');
-    selectTheme = document.getElementById('design');
     selectColor = document.getElementById('color');
     selectPayment = document.getElementById('payment');
-    firstInput = document.getElementsByTagName('input')[0];
-    firstFieldSet = document.getElementsByTagName('fieldset')[0];
     activitiesFieldSet = document.getElementsByClassName('activities')[0];
     formEl = document.getElementsByTagName('form')[0];
     dynamicallyCreatedElements = [];
     initialColorOptions = [...selectColor.options];
-    colorDiv = document.getElementById('colors-js-puns');
     paypalDiv = document.getElementById('paypal');
     bitcoinDiv = document.getElementById('bitcoin');
     creditCardDiv = document.getElementById('credit-card');
@@ -41,7 +33,6 @@ const registerGlobals = () => {
         "ID": 0,
     };
     validationErrors = [];
-
 }
 
 
@@ -108,7 +99,7 @@ const clearErrors = () => {
  *  applies accordingly to adapt with genereally tracked validation errors in the form
  */
 const clearZipErrors = () => {
-    var foundIndexes = [];
+    let foundIndexes = [];
     for (let i = 0; i < validationErrors.length; i += 1) {
         if (validationErrors[i].code.indexOf('ZIP') > -1) {
             foundIndexes.push(i);
@@ -146,6 +137,7 @@ const clearOptions = (node) => {
  * @param {*} value -- boolean display or not
  */
 const switchColorSelection = (value) => {
+    const colorDiv = document.getElementById('colors-js-puns');
     if (value) {
         colorDiv.style.display = 'block';
     } else {
@@ -166,7 +158,7 @@ const switchColorSelection = (value) => {
  * @param {*} doInsert HTMLNode - child element to insert before to parent
  */
 const createElement = (type, args, appendTo, doInsert) => {
-    var el = document.createElement(type);
+    let el = document.createElement(type);
     const argsKeys = Object.keys(args);
     for (let i = 0; i < argsKeys.length; i += 1) {
         if (argsKeys[i] === 'style') {
@@ -206,7 +198,7 @@ const createElement = (type, args, appendTo, doInsert) => {
 const applyFailedValidation = (playingZip) => {
 
     //if user is interecting with Zip filed then re-arrange validation errors
-    var errorList = [...validationErrors];
+    let errorList = [...validationErrors];
     if (playingZip) {
         errorList = validationErrors.filter(s => s.code.indexOf('ZIP') > -1);
     }
@@ -369,6 +361,8 @@ const submitForm = (e) => {
  * seperately hanliding realtime messaging functionality to zip field in the CC form
  */
 const registerEvents = () => {
+    //local initials
+    const firstFieldSet = document.getElementsByTagName('fieldset')[0];
 
     /** exceeds Real-time Error Messages case
      * applied to zip field
@@ -492,7 +486,7 @@ const registerEvents = () => {
 
         } else if (tag === 'INPUT') {
             const changeInput = e.target;
-            var totalCost = 0;
+            let totalCost = 0;
             const changeInputTime = changeInput.getAttribute("data-day-and-time");
 
             const checkList = document.querySelectorAll('input[type=checkbox]');
@@ -537,6 +531,8 @@ const registerEvents = () => {
  * initializes action with defaults
  */
 const initForm = () => {
+    //local initials
+    const firstInput = document.getElementsByTagName('input')[0];
 
     //registering global variables
     registerGlobals();
