@@ -119,7 +119,7 @@ const clearZipErrors = () => {
     }
 
     //needed to co-op with other produced form validation errors
-    if(foundIndexes > 0) {
+    if(foundIndexes > -1) {
         for(let i = 0; i < foundIndexes.length; i+= 1) {
             validationErrors.splice(foundIndexes[i], 1);
         }
