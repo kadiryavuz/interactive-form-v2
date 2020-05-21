@@ -110,17 +110,17 @@ const clearErrors = () => {
 const clearZipErrors = () => {
     var foundIndexes = [];
     for (let i = 0; i < validationErrors.length; i += 1) {
-        if(validationErrors[i].code.indexOf('ZIP') > -1) {
+        if (validationErrors[i].code.indexOf('ZIP') > -1) {
             foundIndexes.push(i);
             validationErrors[i].control.style.border = "2px solid rgb(111, 157, 220)";
             resetDynamics(resetTypes.ID, validationErrors[i].code);
         }
-        
+
     }
 
     //needed to co-op with other produced form validation errors
-    if(foundIndexes > -1) {
-        for(let i = 0; i < foundIndexes.length; i+= 1) {
+    if (foundIndexes > -1) {
+        for (let i = 0; i < foundIndexes.length; i += 1) {
             validationErrors.splice(foundIndexes[i], 1);
         }
     }
@@ -207,7 +207,7 @@ const applyFailedValidation = (playingZip) => {
 
     //if user is interecting with Zip filed then re-arrange validation errors
     var errorList = [...validationErrors];
-    if(playingZip) {
+    if (playingZip) {
         errorList = validationErrors.filter(s => s.code.indexOf('ZIP') > -1);
     }
 
@@ -275,7 +275,7 @@ const validateForm = (cb) => {
             break;
         }
     }
-    
+
     if (!atLeastOneChecked) {
         validationErrors.push({ code: 'ACT101', text: "Select at least one checkbox under the 'Register for Activities' section of the form", control: activitiesFieldSet.children[0] });
     }
@@ -378,23 +378,29 @@ const registerEvents = () => {
         clearZipErrors();
         // validationErrors = [];
         const zipVal = e.target.value;
-        
-        if (zipVal.length > 0 && zipVal.length <= 5) {
-            const isAllDigits = /^[0-9]*$/gm.test(zipVal);
-            if(isAllDigits) {
-                validationErrors.push({ code: 'ZIPRANDOM1', text: `A sample Zipcode: 44112 => ${5-zipVal.length} digits more`, control: zipInput });
-            } else {
+        const isAllDigits = /^[0-9]*$/gm.test(zipVal);
+        if (zipVal.length > 0 && zipVal.length < 5) {
+
+            if (isAllDigits) {
+                validationErrors.push({ code: 'ZIPRANDOM1', text: `A sample Zipcode: 44112 => ${5 - zipVal.length} digits more`, control: zipInput });
+            }
+            else {
                 validationErrors.push({ code: 'ZIPRANDOM2', text: `Digits Only Please!!`, control: zipInput });
             }
-            
-        }  else if( zipVal.length > 5) {
-            const isAllDigits = /^[0-9]*$/gm.test(zipVal);
-            if(isAllDigits) {
+
+        } else if (zipVal.length > 5) {
+            if (isAllDigits) {
                 validationErrors.push({ code: 'ZIPRANDOM3', text: `Too much digits: Need only 5`, control: zipInput });
             } else {
                 validationErrors.push({ code: 'ZIPRANDOM4', text: `Calm Down!`, control: zipInput });
             }
-           
+
+        } else if (zipVal.length === 5 && isAllDigits) {
+            //while real-time checking, better to remove remining errors if all validation fulfilled
+            clearZipErrors();
+        } else if (zipVal.length === 5 && !isAllDigits) {
+            //while real-time checking, better to remove remining errors if all validation fulfilled
+            validationErrors.push({ code: 'ZIPRANDOM6', text: `Clear non-digits please!`, control: zipInput });
         } else {
             validationErrors.push({ code: 'ZIPRANDOM5', text: `You can do it!`, control: zipInput });
         }
