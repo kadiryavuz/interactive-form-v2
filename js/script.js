@@ -1,18 +1,19 @@
 
 //global initials
-var selectColor;
-var selectPayment;
-var firstFieldSet;
-var activitiesFieldSet;
-var formEl;
-var dynamicallyCreatedElements;
-var initialColorOptions;
-var colorDiv;
-var creditCardDiv;
-var paypalDiv;
-var bitcoinDiv;
-var resetTypes;
-var validationErrors;
+let selectColor;
+let selectPayment;
+let otherJob;
+let firstFieldSet;
+let activitiesFieldSet;
+let formEl;
+let dynamicallyCreatedElements;
+let initialColorOptions;
+let colorDiv;
+let creditCardDiv;
+let paypalDiv;
+let bitcoinDiv;
+let resetTypes;
+let validationErrors;
 
 
 /**
@@ -22,6 +23,7 @@ var validationErrors;
 const registerGlobals = () => {
     selectColor = document.getElementById('color');
     selectPayment = document.getElementById('payment');
+    otherJob = document.getElementById('other-title');
     activitiesFieldSet = document.getElementsByClassName('activities')[0];
     formEl = document.getElementsByTagName('form')[0];
     dynamicallyCreatedElements = [];
@@ -414,9 +416,11 @@ const registerEvents = () => {
 
             switch (subjectElId) {
                 case 'title':
-                    resetDynamics(resetTypes.ID, 'other-title');
                     if (changeVal === 'other') {
-                        createElement('input', { id: 'other-title', placeholder: 'Your Job Role' }, firstFieldSet);
+                        //display inline seems better option
+                        otherJob.style.display = 'inline-block';
+                    } else {
+                        otherJob.style.display = 'none';
                     }
                     break;
                 case 'size':
@@ -532,6 +536,7 @@ const registerEvents = () => {
  */
 const initForm = () => {
     //local initials
+
     const firstInput = document.getElementsByTagName('input')[0];
 
     //registering global variables
@@ -549,6 +554,9 @@ const initForm = () => {
     selectPayment.options[0].disabled = true;
     paypalDiv.style.display = 'none';
     bitcoinDiv.style.display = 'none';
+
+    //hiding other job field initially
+    otherJob.style.display = 'none';
 
     //one of the exceeds cases: hiding Color selectin initially
     switchColorSelection(false);
